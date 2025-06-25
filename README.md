@@ -9,7 +9,7 @@
 
 
 ## 🔥 News
-* **`2025.06.26`** 🌟 We are very proud to launch **Kwai Keye-VL**, a cutting-edge multimodal large language model meticulously crafted by the **Foundational Large Model Team** at [Kuaishou](https://www.kuaishou.com/). As a cornerstone AI product within Kuaishou's advanced technology ecosystem, Keye excels in video understanding, visual perception, and reasoning tasks, setting new benchmarks in performance. Our team is working tirelessly to push the boundaries of what's possible, so stay tuned for more exciting updates!
+* **`2025.06.26`** 🌟 We are very proud to launch **Kwai Keye-VL**, a cutting-edge multimodal large language model meticulously crafted by the **Kwai Keye Team** at [Kuaishou](https://www.kuaishou.com/). As a cornerstone AI product within Kuaishou's advanced technology ecosystem, Keye excels in video understanding, visual perception, and reasoning tasks, setting new benchmarks in performance. Our team is working tirelessly to push the boundaries of what's possible, so stay tuned for more exciting updates!
 
 
 
@@ -25,6 +25,9 @@
   - [🌟 Post-Train](#-post-train)
 - [📈 Experimental Results](#-experimental-results)
 - [✒️ Citation](#️-citation)
+- [Inference](/Users/lxy/Documents/Keye/keye-vl-utils)
+- [Evaluation](evaluation/KC-MMBench/README.md)
+- [Deployment](keye-vl-8b-preview/README.md)
 
 ## 👀 Architecture and Training Strategy
 

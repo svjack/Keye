@@ -18,7 +18,7 @@ from transformers import AutoModel, AutoProcessor
 from keye_vl_utils import process_vision_info
 
 # default: Load the model on the available device(s)
-model_path = "Keye/Keye-8B-Instruct"
+model_path = "Keye/Keye-VL-8B-preview"
 
 model = AutoModel.from_pretrained(
     model_path, torch_dtype="auto", device_map="auto", attn_implementation="flash_attention_2", trust_remote_code=True,
@@ -62,4 +62,4 @@ print(generated_ids)
 ```
 
 ## Deployment
-The Keye-8B-Instruct series maintain full compatibility with the `Qwen2_5_VLForConditionalGeneration` architecture for deployment and inference.
+The Keye-VL-8B-preview series maintain full compatibility with the `Qwen2_5_VLForConditionalGeneration` architecture for deployment and inference.
