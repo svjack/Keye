@@ -11,7 +11,7 @@ Based on the in-house short video data, we constructed 6 datasets for **Keye** a
 | High_Like      | A binary classification task to determine the rate of likes of a short video. |
 | SPU            | The task of determining whether two items are the same product in e-commerce. |
 
-These datasets can be downloaded from [Hugging Face (HF)](https://huggingface.co/). 
+These datasets are available on [Hugging Face (HF)](https://huggingface.co/datasets/Kwai-Keye/KC-MMbench). 
 
 ## Performance 
 | Task           | Qwen2.5-VL-3B | Qwen2.5-VL-7B | InternVL-3-8B | MiMo-VL | Keye |
