@@ -218,7 +218,8 @@ The post-training phase of Kwai Keye is meticulously designed into two phases wi
 
 ## 📈 Experimental Results
 
-![image](https://github.com/user-attachments/assets/a27cc0b8-e511-4879-969a-b6bc90f61c7e)
+![image](https://github.com/user-attachments/assets/08edb828-5532-465c-9714-e27b8dacdbb9)
+
 
 
 1. Keye-VL-8B establishes itself with powerful, state-of-the-art perceptual abilities that are competitive with leading models. 
