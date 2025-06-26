@@ -5,23 +5,23 @@ Based on the in-house short video data, we constructed 6 datasets for **Keye** a
 | Task           | Description                                                                 |
 | -------------- | --------------------------------------------------------------------------- |
 | CPV            | The task of predicting product attributes in e-commerce.                    |
-| Video_Topic    | The task of determining whether multiple videos belong to the same topic.   |
-| Video_Order    | The task of determining the logical order between multiple videos with the same topic. |
-| PornComment    | The task of whether short video comments contain pornographic content.      |
+| Hot_Videos_Aggregation    | The task of determining whether multiple videos belong to the same topic.   |
+| Collection_Order     | The task of determining the logical order between multiple videos with the same topic. |
+| Pornographic_Comment    | The task of whether short video comments contain pornographic content.      |
 | High_Like      | A binary classification task to determine the rate of likes of a short video. |
 | SPU            | The task of determining whether two items are the same product in e-commerce. |
 
-These datasets are available on [Hugging Face (HF)](https://huggingface.co/datasets/Kwai-Keye/KC-MMbench). 
+These datasets can be downloaded from [Hugging Face (HF)](https://huggingface.co/datasets/Kwai-Keye/KC-MMbench). 
 
 ## Performance 
-| Task           | Qwen2.5-VL-3B | Qwen2.5-VL-7B | InternVL-3-8B | MiMo-VL | Keye |
+| Task           | Qwen2.5-VL-3B | Qwen2.5-VL-7B | InternVL-3-8B | MiMo-VL-7B | Kwai Keye-VL-8B |
 | -------------- | ------------- | ------------- | ------------- | ------- | ---- |
-| CPV            | 12.80         | 20.10         | 15.00         | 17.10   | 55.13 |
-| Video_Topic    | 43.90         | 46.95         | 51.21         | 49.39   | 54.30 |
-| Video_Order    | 36.80         | 58.40         | 64.80         | 78.40   | 84.43 |
-| PornComment    | 57.10         | 56.50         | 57.60         | 68.60   | 71.96 |
-| High_Like      | 48.20         | 48.70         | 47.80         | 50.40   | 55.25 |
-| SPU            | 74.10         | 81.30         | 75.60         | 81.90   | 87.05 |
+| CPV            | 12.39         | 20.08         | 14.95         | 16.66   | 55.13 |
+| Hot_Videos_Aggregation    | 42.38         | 46.35         | 52.31         | 49.00   | 54.30 |
+| Collection_Order    | 36.88         | 59.83         | 64.75         | 78.68   | 84.43 |
+| Pornographic_Comment    | 56.61         | 56.08         | 57.14         | 68.25   | 71.96 |
+| High_Like      | 48.85         | 47.94         | 47.03         | 51.14   | 55.25 |
+| SPU            | 74.09         | 81.34         | 75.64         | 81.86   | 87.05 |
 
 ## Example of Evaluation
 
@@ -35,17 +35,17 @@ Here is an example of an evaluation using VLMs on our datasets. The following co
             "class": "KwaiVQADataset",
             "dataset": "CPV"
         },
-        "Video_Topic": {
+        "Hot_Videos_Aggregation": {
             "class": "KwaiVQADataset",
-            "dataset": "Video_Topic"
+            "dataset": "Hot_Videos_Aggregation"
         },
-        "Video_Order": {
+        "Collection_Order": {
             "class": "KwaiVQADataset",
-            "dataset": "Video_Order"
+            "dataset": "Collection_Order"
         },
-        "PornComment": {
+        "Pornographic_Comment": {
             "class": "KwaiYORNDataset",
-            "dataset": "PornComment"
+            "dataset": "Pornographic_Comment"
         },
         "High_like":{
             "class":"KwaiYORNDataset",
@@ -57,3 +57,4 @@ Here is an example of an evaluation using VLMs on our datasets. The following co
         }
     }
 }
+
