@@ -60,6 +60,3 @@ print(inputs)
 generated_ids = model.generate(**inputs)
 print(generated_ids)
 ```
-
-## Deployment
-The Keye-VL-8B-preview series maintain full compatibility with the `Qwen2_5_VLForConditionalGeneration` architecture for deployment and inference.
