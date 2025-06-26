@@ -47,7 +47,7 @@ from transformers import AutoModel, AutoProcessor
 from keye_vl_utils import process_vision_info
 
 # default: Load the model on the available device(s)
-model_path = "Keye/Keye-VL-8B-preview"
+model_path = "Kwai-Keye/Keye-VL-8B-Preview"
 
 model = AutoModel.from_pretrained(
     model_path, torch_dtype="auto", device_map="auto", attn_implementation="flash_attention_2", trust_remote_code=True,
@@ -81,7 +81,7 @@ messages = [
 ]
 
 processor = AutoProcessor.from_pretrained(model_path)
-model = KeyeForConditionalGeneration.from_pretrained(model_path, torch_dtype="auto", device_map="auto")
+model = AutoModel.from_pretrained(model_path, torch_dtype="auto", device_map="auto").to('cuda')
 text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 images, videos, video_kwargs = process_vision_info(messages, return_video_kwargs=True)
 inputs = processor(text=text, images=images, videos=videos, padding=True, return_tensors="pt", **video_kwargs).to("cuda")
@@ -231,9 +231,15 @@ The post-training phase of Kwai Keye is meticulously designed into two phases wi
 If you find our work helpful for your research, please consider citing our work.   
 
 ```bibtex
-@misc{kwaikeyeteam2025,
-      title={Kwai Keye-VL Technical Report}, 
-      author={{Kwai Keye Team}},
-      year={2025},
+@misc{Keye-VL-8B-Preview,
+    title = {Keye-VL-8B-Preview},
+    url = {https://github.com/Kwai-Keye/Keye},
+    author = {Kwai Keye Team},
+    month = {June},
+    year = {2025}
 }
 ```
+
+## Acknowledgement
+
+Kwai Keye-VL is developed based on the codebases of the following projects: [SigLIP](https://huggingface.co/google/siglip-so400m-patch14-384), [Qwen3](https://github.com/QwenLM/Qwen3), [Qwen2.5-VL](https://github.com/QwenLM/Qwen2.5-VL), [VLMEvalKit](https://github.com/open-compass/VLMEvalKit). We sincerely thank these projects for their outstanding work.

@@ -21,7 +21,7 @@ def remove_think_tags(text):
 
 class KwaiYORNDataset(ImageYORNDataset):
     DATASET_URL = {
-        'PornComment': 'PornComment.tsv',
+        'Pornographic_Comment': 'PornComment.tsv',
         'High_like': 'High_like.tsv',
         'SPU': 'SPU.tsv'
     }
@@ -98,8 +98,8 @@ class KwaiYORNDataset(ImageYORNDataset):
 class KwaiVQADataset(ImageVQADataset):
     TYPE = 'VQA'
     DATASET_URL = {
-        'Video_Order': 'Video_Order.tsv',
-        'Video_Topic': 'Video_Topic.tsv',
+        'Collection_Order': 'Video_Order.tsv',
+        'Hot_Videos_Aggregation': 'Video_Topic.tsv',
         'CPV': 'CPV.tsv'
     }
 
@@ -140,7 +140,7 @@ class KwaiVQADataset(ImageVQADataset):
                 indices = [line['index'] for line in lines]
             
                 if len(indices):
-                    if 'Video_Topic' in self.dataset_name:
+                    if 'Hot_Videos_Aggregation' in self.dataset_name:
                         eval_process = Topic_eval
                     else:
                         eval_process = Kwaivqa_eval

@@ -18,7 +18,7 @@ from transformers import AutoModel, AutoProcessor
 from keye_vl_utils import process_vision_info
 
 # default: Load the model on the available device(s)
-model_path = "Keye/Keye-VL-8B-preview"
+model_path = "Kwai-Keye/Keye-VL-8B-Preview"
 
 model = AutoModel.from_pretrained(
     model_path, torch_dtype="auto", device_map="auto", attn_implementation="flash_attention_2", trust_remote_code=True,
@@ -52,7 +52,7 @@ messages = [
 ]
 
 processor = AutoProcessor.from_pretrained(model_path)
-model = KeyeForConditionalGeneration.from_pretrained(model_path, torch_dtype="auto", device_map="auto")
+model = AutoModel.from_pretrained(model_path, torch_dtype="auto", device_map="auto").to('cuda')
 text = processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 images, videos, video_kwargs = process_vision_info(messages, return_video_kwargs=True)
 inputs = processor(text=text, images=images, videos=videos, padding=True, return_tensors="pt", **video_kwargs).to("cuda")

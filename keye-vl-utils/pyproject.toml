@@ -3,7 +3,7 @@ name = "keye-vl-utils"
 version = "1.0.0"
 description = "Keye Vision Language Model Utils - PyTorch"
 authors = [
-    { name = "Keye Team", email = "????@kuaishou.com" },
+    { name = "Kwai Keye Team"},
 ]
 dependencies = [
     "requests",
@@ -28,9 +28,9 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/QwenLM/Qwen2-VL/tree/main/keye-vl-utils ???"
-Repository = "https://github.com/QwenLM/Qwen2-VL.git ???"
-Issues = "https://github.com/QwenLM/Qwen2-VL/issues ???"
+Homepage = "https://github.com/Kwai-Keye/Keye/tree/main/keye-vl-utils"
+Repository = "https://github.com/Kwai-Keye/Keye.git"
+Issues = "https://github.com/Kwai-Keye/Keye/issues"
 
 [project.optional-dependencies]
 decord = [

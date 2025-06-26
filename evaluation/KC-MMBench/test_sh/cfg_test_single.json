@@ -13,17 +13,17 @@
             "class": "KwaiVQADataset",
             "dataset": "CPV"
         },
-        "Video_Topic": {
+        "Hot_Videos_Aggregation": {
             "class": "KwaiVQADataset",
-            "dataset": "Video_Topic"
+            "dataset": "Hot_Videos_Aggregation"
         },
-        "Video_Order": {
+        "Collection_Order": {
             "class": "KwaiVQADataset",
-            "dataset": "Video_Order"
+            "dataset": "Collection_Order"
         },
-        "PornComment": {
+        "Pornographic_Comment": {
             "class": "KwaiYORNDataset",
-            "dataset": "PornComment"
+            "dataset": "Pornographic_Comment"
         },
         "High_like":{
             "class":"KwaiYORNDataset",
