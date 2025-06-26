@@ -231,5 +231,9 @@ The post-training phase of Kwai Keye is meticulously designed into two phases wi
 If you find our work helpful for your research, please consider citing our work.   
 
 ```bibtex
-
+@misc{kwaikeyeteam2025,
+      title={Kwai Keye-VL Technical Report}, 
+      author={{Kwai Keye Team}},
+      year={2025},
+}
 ```
