@@ -22,7 +22,7 @@ model_path = "Kwai-Keye/Keye-VL-8B-Preview"
 
 model = AutoModel.from_pretrained(
     model_path, torch_dtype="auto", device_map="auto", attn_implementation="flash_attention_2", trust_remote_code=True,
-).to('cuda')
+)
 
 # You can set the maximum tokens for a video through the environment variable VIDEO_MAX_PIXELS
 # based on the maximum tokens that the model can accept. 
