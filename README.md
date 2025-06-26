@@ -92,42 +92,6 @@ print(generated_ids)
 ### Evaluation
 See [evaluation/KC-MMBench/README.md](evaluation/KC-MMBench/README.md) for details.
 
-#### Example of Evaluation
-
-Here is an example of an evaluation using VLMs on our datasets. The following configuration needs to be added to the config file.
-```python
-{
-
-    "model":'...'
-    "data": {
-        "CPV": {
-            "class": "KwaiVQADataset",
-            "dataset": "CPV"
-        },
-        "Video_Topic": {
-            "class": "KwaiVQADataset",
-            "dataset": "Video_Topic"
-        },
-        "Video_Order": {
-            "class": "KwaiVQADataset",
-            "dataset": "Video_Order"
-        },
-        "PornComment": {
-            "class": "KwaiYORNDataset",
-            "dataset": "PornComment"
-        },
-        "High_like":{
-            "class":"KwaiYORNDataset",
-            "dataset":"High_like"
-        },
-        "SPU": {
-            "class": "KwaiYORNDataset",
-            "dataset": "SPU"
-        }
-    }
-}
-```
-
 ## 👀 Architecture and Training Strategy
 
 <div align="center">
