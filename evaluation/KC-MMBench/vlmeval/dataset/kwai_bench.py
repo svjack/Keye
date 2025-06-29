@@ -8,6 +8,11 @@ from ..utils import *
 import pandas as pd
 import warnings
 import re
+from huggingface_hub import snapshot_download
+import shutil
+import glob
+import os
+
 
 def get_options(text):
     pattern = r'([A-Z])\.\s*(.+)'
@@ -25,6 +30,28 @@ class KwaiYORNDataset(ImageYORNDataset):
         'High_like': 'High_like.tsv',
         'SPU': 'SPU.tsv'
     }
+
+    def __init__(self, dataset='MMBench', skip_noimg=True):
+        # super().__init__(dataset=dataset, skip_noimg=skip_noimg)
+
+        cache_path = get_cache_path('Kwai-Keye/KC-MMbench')
+        if cache_path is not None:
+            dataset_path = cache_path
+        else:
+            dataset_path = snapshot_download(repo_id='Kwai-Keye/KC-MMbench', repo_type='dataset')
+
+        tsv_files = glob.glob(osp.join(dataset_path, 'subsets', '*.tsv'))
+        for tsv_file in tsv_files:
+            shutil.copy(tsv_file, LMUDataRoot())
+        super().__init__(dataset=dataset, skip_noimg=skip_noimg)
+        self.dataset_path = dataset_path
+        self.meta_only = False
+
+    def dump_image(self, line):
+        assert 'image_path' in line
+        tgt_path = toliststr(line['image_path'])
+        tgt_path = [osp.join(self.dataset_path, 'images', x) for x in tgt_path]
+        return tgt_path
     
     def build_prompt(self, line):
         msgs = super().build_prompt(line)
@@ -93,8 +120,6 @@ class KwaiYORNDataset(ImageYORNDataset):
         return score
 
 
-
-
 class KwaiVQADataset(ImageVQADataset):
     TYPE = 'VQA'
     DATASET_URL = {
@@ -102,6 +127,29 @@ class KwaiVQADataset(ImageVQADataset):
         'Hot_Videos_Aggregation': 'Video_Topic.tsv',
         'CPV': 'CPV.tsv'
     }
+
+    def __init__(self, dataset='MMBench', skip_noimg=True):
+        # super().__init__(dataset=dataset, skip_noimg=skip_noimg)
+
+        cache_path = get_cache_path('Kwai-Keye/KC-MMbench')
+        if cache_path is not None:
+            dataset_path = cache_path
+        else:
+            dataset_path = snapshot_download(repo_id='Kwai-Keye/KC-MMbench', repo_type='dataset')
+        import pdb; pdb.set_trace()
+        tsv_files = glob.glob(osp.join(dataset_path, 'subsets', '*.tsv'))
+        for tsv_file in tsv_files:
+            shutil.copy(tsv_file, LMUDataRoot())
+
+        super().__init__(dataset=dataset, skip_noimg=skip_noimg)
+        self.dataset_path = dataset_path
+        self.meta_only = False
+
+    def dump_image(self, line):
+        assert 'image_path' in line
+        tgt_path = toliststr(line['image_path'])
+        tgt_path = [osp.join(self.dataset_path, 'images', x) for x in tgt_path]
+        return tgt_path
 
     def judge_acc(self, result_file, post_check):
         def default_value():
@@ -164,5 +212,3 @@ class KwaiVQADataset(ImageVQADataset):
                 dump(score, score_pth)
         return score
         
-
-

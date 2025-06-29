@@ -1,4 +1,6 @@
 # Evaluation Datasets 
+This project is based on the excellent [VLMEvalKit](https://github.com/open-compass/VLMEvalKit) framework.
+
 Based on the in-house short video data, we constructed 6 datasets for **Keye** and other Vision-Language Models (VLMs) like **Qwen2.5-VL** and **InternVL** to evaluate performance.
 
 ## Tasks
@@ -25,7 +27,9 @@ These datasets can be downloaded from [Hugging Face (HF)](https://huggingface.co
 
 ## Example of Evaluation
 
+### Config
 Here is an example of an evaluation using VLMs on our datasets. The following configuration needs to be added to the config file.
+
 ```python
 {
 
@@ -57,4 +61,13 @@ Here is an example of an evaluation using VLMs on our datasets. The following co
         }
     }
 }
+```
 
+### Evaluation of Keye-VL-8B-Preview
+```bash
+cd evaluation/KC-MMBench/scripts/Keye-VL-8B-Preview
+
+
+# run eval
+bash run.sh
+```

@@ -1,0 +1,35 @@
+{
+    "model": {
+        "Keye-VL-8B-Preview": {
+            "class": "KeyeChat",
+            "model_path": "Kwai-Keye/Keye-VL-8B-Preview",
+            "think": true
+        }
+    },
+    "data": {
+        "CPV": {
+            "class": "KwaiVQADataset",
+            "dataset": "CPV"
+        },
+        "Hot_Videos_Aggregation": {
+            "class": "KwaiVQADataset",
+            "dataset": "Hot_Videos_Aggregation"
+        },
+        "Collection_Order": {
+            "class": "KwaiVQADataset",
+            "dataset": "Collection_Order"
+        },
+        "Pornographic_Comment": {
+            "class": "KwaiYORNDataset",
+            "dataset": "Pornographic_Comment"
+        },
+        "High_like":{
+            "class":"KwaiYORNDataset",
+            "dataset":"High_like"
+        },
+        "SPU": {
+            "class": "KwaiYORNDataset",
+            "dataset": "SPU"
+        }
+    }
+}

@@ -177,33 +177,33 @@ GPT4o_MINI/
 
 2weiyun*
 script.py
-Gemini*
+# Gemini*
 Claude3-5V*
 GLM4V*
 GPT4o*
 GPT4V*
 mmmu_debug
-bailingMM
-BailingMM*
-SenseChat*
-Step*
+# bailingMM
+# BailingMM*
+# SenseChat*
+# Step*
 DoubaoVL
 arch
-BlueLM*
-mmb_*
+# BlueLM*
+# mmb_*
 gpt-4.1*
-Reka*
+# Reka*
 Taiyi
 TeleMM
 apple.jpg
 assets/LOGO.png
 api_list.txt
 vlmeval/gemini_tmp.py
-run.sh
+# run.sh
 run_g.sh
 tmp/
-InternVL*
-Qwen*
+# InternVL*
+# Qwen*
 CongRong*
 Seed1.5*
 aguvis*
