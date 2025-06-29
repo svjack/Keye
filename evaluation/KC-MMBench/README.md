@@ -67,6 +67,10 @@ Here is an example of an evaluation using VLMs on our datasets. The following co
 ```bash
 cd evaluation/KC-MMBench/scripts/Keye-VL-8B-Preview
 
+# download dataset
+git clone https://huggingface.co/datasets/KwaiKeye/KC-MMbench
+cp -r ./KC-MMbench/images/* ./KC-MMbench/subsets/
+export LMUData=./KC-MMbench/subsets
 
 # run eval
 bash run.sh
