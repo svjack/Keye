@@ -5,10 +5,11 @@
   <img src="asset/keye_logo_2.png" width="100%" alt="Kwai Keye-VL Logo">
 </div>
 
-<font size=7><div align='center' >  [[🍎 Home Page](https://kwai-keye.github.io/)] [[📖 Technical Report]()] [[📊 Models](https://huggingface.co/Kwai-Keye)] [[🚀 Demo](https://huggingface.co/spaces/Kwai-Keye/Keye-VL-8B-Preview)] </div></font>
+<font size=7><div align='center' >  [[🍎 Home Page](https://kwai-keye.github.io/)] [[📖 Technical Report](https://arxiv.org/abs/2507.01949)] [[📊 Models](https://huggingface.co/Kwai-Keye)] [[🚀 Demo](https://huggingface.co/spaces/Kwai-Keye/Keye-VL-8B-Preview)] </div></font>
 
 
 ## 🔥 News
+* **2025.07.03** 🌟 We are excited to announce the release of our comprehensive technical report!  You can read it now at [arxiv](https://arxiv.org/abs/2507.01949).  
 * **`2025.06.26`** 🌟 We are very proud to launch **Kwai Keye-VL**, a cutting-edge multimodal large language model meticulously crafted by the **Kwai Keye Team** at [Kuaishou](https://www.kuaishou.com/). As a cornerstone AI product within Kuaishou's advanced technology ecosystem, Keye excels in video understanding, visual perception, and reasoning tasks, setting new benchmarks in performance. Our team is working tirelessly to push the boundaries of what's possible, so stay tuned for more exciting updates!
 
 
@@ -182,8 +183,7 @@ The post-training phase of Kwai Keye is meticulously designed into two phases wi
 
 ## 📈 Experimental Results
 
-![image](https://github.com/user-attachments/assets/08edb828-5532-465c-9714-e27b8dacdbb9)
-
+![image](https://github.com/user-attachments/assets/e16f785d-c275-41b9-9189-498c2dcfa6fc)
 
 
 1. Keye-VL-8B establishes itself with powerful, state-of-the-art perceptual abilities that are competitive with leading models. 
