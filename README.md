@@ -196,12 +196,14 @@ The post-training phase of Kwai Keye is meticulously designed into two phases wi
 If you find our work helpful for your research, please consider citing our work.   
 
 ```bibtex
-@misc{Keye-VL-8B-Preview,
-    title = {Keye-VL-8B-Preview},
-    url = {https://github.com/Kwai-Keye/Keye},
-    author = {Kwai Keye Team},
-    month = {June},
-    year = {2025}
+@misc{kwaikeyeteam2025kwaikeyevltechnicalreport,
+      title={Kwai Keye-VL Technical Report}, 
+      author={Kwai Keye Team},
+      year={2025},
+      eprint={2507.01949},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2507.01949}, 
 }
 ```
 
