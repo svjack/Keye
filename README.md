@@ -89,7 +89,13 @@ images, videos, video_kwargs = process_vision_info(messages, return_video_kwargs
 inputs = processor(text=text, images=images, videos=videos, padding=True, return_tensors="pt", **video_kwargs).to("cuda")
 print(inputs)
 generated_ids = model.generate(**inputs)
-print(generated_ids)
+generated_ids_trimmed = [
+    out_ids[len(in_ids) :] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
+]
+output_text = processor.batch_decode(
+    generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False
+)
+print(output_text)
 ```
 ### Evaluation
 See [evaluation/KC-MMBench/README.md](evaluation/KC-MMBench/README.md) for details.
