@@ -97,6 +97,240 @@ output_text = processor.batch_decode(
 )
 print(output_text)
 ```
+
+#### Deployment
+- We recommend using vLLM for fast Keye-VL-8B-Preview deployment and inference.
+
+##### Install
+```bash
+pip install keye-vl-utils "vllm>=0.9.2"
+```
+
+##### Offline Inference
+```bash
+# refer to https://github.com/QwenLM/Qwen2.5-VL?tab=readme-ov-file#inference-locally
+
+from transformers import AutoProcessor
+from vllm import LLM, SamplingParams
+from keye_vl_utils import process_vision_info
+
+model_path = "/hetu_group/jky/playground_hhd_2/2025/20250626_keye/Keye-VL-8B-Preview"
+
+llm = LLM(
+    model=model_path,
+    limit_mm_per_prompt={"image": 10, "video": 10},
+    trust_remote_code=True,
+)
+
+sampling_params = SamplingParams(
+    temperature=0.3,
+    max_tokens=256,
+)
+
+# image
+image_messages = [
+    {
+        "role": "user",
+        "content": [
+            {
+                "type": "image",
+                "image": "https://s1-11508.kwimgs.com/kos/nlav11508/mllm_all/ziran_jiafeimao_11.jpg",
+            },
+            {"type": "text", "text": "Describe this image./think"},
+        ],
+    },
+]
+
+# video
+video_messages = [
+    {
+        "role": "user",
+        "content": [
+            {
+                "type": "video",
+                "video": "http://s2-11508.kwimgs.com/kos/nlav11508/MLLM/videos_caption/98312843263.mp4",
+            },
+            {"type": "text", "text": "Describe this video./think"},
+        ],
+    },
+]
+
+# Here we use video messages as a demonstration
+messages = video_messages
+
+processor = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
+prompt = processor.apply_chat_template(
+    messages,
+    tokenize=False,
+    add_generation_prompt=True,
+)
+image_inputs, video_inputs, video_kwargs = process_vision_info(
+    messages, return_video_kwargs=True
+)
+
+mm_data = {}
+if image_inputs is not None:
+    mm_data["image"] = image_inputs
+if video_inputs is not None:
+    mm_data["video"] = video_inputs
+
+llm_inputs = {
+    "prompt": prompt,
+    "multi_modal_data": mm_data,
+    # FPS will be returned in video_kwargs
+    "mm_processor_kwargs": video_kwargs,
+}
+
+outputs = llm.generate([llm_inputs], sampling_params=sampling_params)
+generated_text = outputs[0].outputs[0].text
+
+print(generated_text)
+```
+
+##### Online Serving
+- Serve
+```bash
+vllm serve \
+    Kwai-Keye/Keye-VL-8B-Preview \
+    --tensor-parallel-size 8 \
+    --enable-prefix-caching \
+    --gpu-memory-utilization 0.8 \
+    --host 0.0.0.0 \
+    --port 8000 \
+    --trust-remote-code
+```
+
+- Openai Chat Completion Client
+```python
+import base64
+import numpy as np
+from PIL import Image
+from io import BytesIO
+from openai import OpenAI
+from keye_vl_utils import process_vision_info
+import requests
+
+
+# Set OpenAI's API key and API base to use vLLM's API server.
+openai_api_key = "EMPTY"
+openai_api_base = "http://localhost:8000/v1"
+
+client = OpenAI(
+    api_key=openai_api_key,
+    base_url=openai_api_base,
+)
+
+# image url
+image_messages = [
+    {
+        "role": "user",
+        "content": [
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": "https://s1-11508.kwimgs.com/kos/nlav11508/mllm_all/ziran_jiafeimao_11.jpg"
+                },
+            },
+            {"type": "text", "text": "Describe this image./think"},
+        ],
+    },
+]
+
+chat_response = client.chat.completions.create(
+    model="Kwai-Keye/Keye-VL-8B-Preview",
+    messages=image_messages,
+)
+print("Chat response:", chat_response)
+
+# image base64-encoded
+
+import base64
+
+image_path = "/path/to/local/image.png"
+with open(image_path, "rb") as f:
+    encoded_image = base64.b64encode(f.read())
+encoded_image_text = encoded_image.decode("utf-8")
+image_messages = [
+    {
+        "role": "user",
+        "content": [
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": f"data:image;base64,{encoded_image_text}"
+                },
+            },
+            {"type": "text", "text": "Describe this image./think"},
+        ],
+    },
+]
+
+chat_response = client.chat.completions.create(
+    model="Kwai-Keye/Keye-VL-8B-Preview",
+    messages=image_messages,
+)
+print("Chat response:", chat_response)
+
+# video, refer to https://github.com/QwenLM/Qwen2.5-VL?tab=readme-ov-file#start-an-openai-api-service
+video_messages = [
+    {"role": "user", "content": [
+        {"type": "video", "video": "http://s2-11508.kwimgs.com/kos/nlav11508/MLLM/videos_caption/98312843263.mp4"},
+        {"type": "text", "text": "Describe this video./think"}]
+    },
+]
+
+def prepare_message_for_vllm(content_messages):
+    vllm_messages, fps_list = [], []
+    for message in content_messages:
+        message_content_list = message["content"]
+        if not isinstance(message_content_list, list):
+            vllm_messages.append(message)
+            continue
+
+        new_content_list = []
+        for part_message in message_content_list:
+            if 'video' in part_message:
+                video_message = [{'content': [part_message]}]
+                image_inputs, video_inputs, video_kwargs = process_vision_info(video_message, return_video_kwargs=True)
+                assert video_inputs is not None, "video_inputs should not be None"
+                video_input = (video_inputs.pop()).permute(0, 2, 3, 1).numpy().astype(np.uint8)
+                fps_list.extend(video_kwargs.get('fps', []))
+
+                # encode image with base64
+                base64_frames = []
+                for frame in video_input:
+                    img = Image.fromarray(frame)
+                    output_buffer = BytesIO()
+                    img.save(output_buffer, format="jpeg")
+                    byte_data = output_buffer.getvalue()
+                    base64_str = base64.b64encode(byte_data).decode("utf-8")
+                    base64_frames.append(base64_str)
+
+                part_message = {
+                    "type": "video_url",
+                    "video_url": {"url": f"data:video/jpeg;base64,{','.join(base64_frames)}"}
+                }
+            new_content_list.append(part_message)
+        message["content"] = new_content_list
+        vllm_messages.append(message)
+    return vllm_messages, {'fps': fps_list}
+
+
+video_messages, video_kwargs = prepare_message_for_vllm(video_messages)
+
+
+chat_response = client.chat.completions.create(
+    model="Kwai-Keye/Keye-VL-8B-Preview",
+    messages=video_messages,
+    max_tokens=128,
+    extra_body={
+        "mm_processor_kwargs": video_kwargs
+    }
+)
+
+print("Chat response:", chat_response)
+```
+
 ### Evaluation
 See [evaluation/KC-MMBench/README.md](evaluation/KC-MMBench/README.md) for details.
 
