@@ -6,14 +6,22 @@
 </div>
 
 <!-- <font size=7> -->
-<div align='center'>
+<!-- <div align='center'>
 [🍎 Home Page](https://kwai-keye.github.io/) 
 [📖 Technical Report](https://arxiv.org/abs/2507.01949) 
 [📊 Models](https://huggingface.co/Kwai-Keye/Keye-VL-1.5-8B) 
 [🚀 Demo](https://huggingface.co/spaces/Kwai-Keye/Keye-VL-8B-Preview)
-</div>
+</div> -->
 <!-- </font> -->
+<font size=7><div align='center' >  
+[[📖 Home Page](https://thyme-vl.github.io/)] 
+[[📖 Technique Report](https://arxiv.org/abs/2508.11630)] 
 
+[[📊 Thyme SFT Model](https://huggingface.co/Kwai-Keye/Thyme-SFT)] 
+[[📊 Thyme RL Model](https://huggingface.co/Kwai-Keye/Thyme-RL)] 
+[[📝 SFT Data](https://huggingface.co/datasets/Kwai-Keye/Thyme-SFT)] 
+[[📝 RL Data](https://huggingface.co/datasets/Kwai-Keye/Thyme-RL)] 
+</div></font>
 ## 🔥 News
 * **`2025.08.28`** 🌟 We are excited to introduce **Keye-VL-1.5**, a more powerful version! By incorporating innovative `Slow-Fast Video Encoding strategy`, `new LongCoT Cold-Start data pipeline`, and `advanced RL training strategies`, Keye-VL-1.5 reaches new heights in video understanding, image comprehension, and reasoning capabilities. Plus, it now supports an extended context length of up to **128k** tokens for handling longer conversations and complex tasks. Stay tuned for more groundbreaking innovations! 
 * **`2025.07.08`** 🌟 Keye-VL is supported by [swift](https://github.com/modelscope/ms-swift) and [vLLM](https://github.com/vllm-project/vllm). Feel free to use it without hesitation!
