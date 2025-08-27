@@ -4,11 +4,11 @@
 <div align="center">
   <img src="asset/keye_logo_2.png" width="100%" alt="Kwai Keye-VL Logo">
 </div>
-
-<font size=7><div align='center' >  [[🍎 Home Page](https://kwai-keye.github.io/)] [[📖 Technical Report](https://arxiv.org/abs/2507.01949)] [[📊 Models](https://huggingface.co/Kwai-Keye)] [[🚀 Demo](https://huggingface.co/spaces/Kwai-Keye/Keye-VL-8B-Preview)] </div></font>
+<font size=7><div align='center' >  [[🍎 Home Page](https://kwai-keye.github.io/)] [[📖 Technical Report](https://arxiv.org/abs/2507.01949)] [[📊 Models](https://huggingface.co/Kwai-Keye/Keye-VL-1.5-8B)] [[🚀 Demo](https://huggingface.co/spaces/Kwai-Keye/Keye-VL-8B-Preview)] </div></font>
 
 
 ## 🔥 News
+* **`2025.08.28`** 🌟 We are excited to introduce **Keye-VL-1.5**, a more powerful version! By incorporating innovative `Slow-Fast Video Encoding strategy`, `new LongCoT Cold-Start data pipeline`, and `advanced RL training strategies`, Keye-VL-1.5 reaches new heights in video understanding, image comprehension, and reasoning capabilities. Plus, it now supports an extended context length of up to **128k** tokens for handling longer conversations and complex tasks. Stay tuned for more groundbreaking innovations! 
 * **`2025.07.08`** 🌟 Keye-VL is supported by [swift](https://github.com/modelscope/ms-swift) and [vLLM](https://github.com/vllm-project/vllm). Feel free to use it without hesitation!
 * **`2025.07.03`** 🌟 We are excited to announce the release of our comprehensive technical report!  You can read it now at [arxiv](https://arxiv.org/abs/2507.01949).  
 * **`2025.06.26`** 🌟 We are very proud to launch **Kwai Keye-VL**, a cutting-edge multimodal large language model meticulously crafted by the **Kwai Keye Team** at [Kuaishou](https://www.kuaishou.com/). As a cornerstone AI product within Kuaishou's advanced technology ecosystem, Keye excels in video understanding, visual perception, and reasoning tasks, setting new benchmarks in performance. Our team is working tirelessly to push the boundaries of what's possible, so stay tuned for more exciting updates!
@@ -372,33 +372,35 @@ See [evaluation/KC-MMBench/README.md](evaluation/KC-MMBench/README.md) for detai
 
 ### 🌟 Post-Train
 
-The post-training phase of Kwai Keye is meticulously designed into two phases with five stages, aiming to comprehensively enhance the model's performance, especially its reasoning ability in complex tasks. This is a key breakthrough for achieving advanced cognitive functions.
+The post-training phase of Kwai Keye-VL-1.5 is meticulously designed into two phases, aiming to comprehensively enhance the model's performance, especially its reasoning ability in complex tasks. This is a key breakthrough for achieving advanced cognitive functions.
 
-#### Stage I. No-Reasoning Training: Strengthening Basic Performance
+#### Stage I. No-Reasoning Training: SFT+MPO
 
-<div align="center">
-  <img src="asset/post1.jpeg" width="100%" alt="Kwai Keye Post-Training">
-  <i>This phase focuses on the model's basic performance and stability in non-reasoning scenarios.</i>
-</div>
 
 <details>
   <summary>More Details</summary>
 
-- **Stage II.1: Supervised Fine-Tuning (SFT)**
+- **Stage I.1: Supervised Fine-Tuning (SFT)**
   - Data Composition: Includes 5 million multimodal data, built on a diverse task classification system (70,000 tasks) using the self-developed TaskGalaxy framework. High-difficulty data is selected by multimodal large models and manually annotated to ensure data quality and challenge.
 
-- **Stage II.2: Mixed Preference Optimization (MPO)**
+- **Stage I.2: Mixed Preference Optimization (MPO)**
   - Data Composition: Comprises open-source data and pure text preference data. Bad cases from the SFT model are used as quality prompts, and preference data is generated through rejection sampling using Qwen2.5VL 72B and SFT models, with manual scoring and ranking.
 
 </details>
 
+<div align="center">
+  <img src="asset/post1.png" width="100%" alt="Kwai Keye Post-Training">
+  <i>Keye-VL-1.5's post-training is composed of Non-Reasoning Stage and Reasoning Stage, non-reasoning stage includes large-scale SFT and MPO, Reasoning Stage includes three steps: CoT Cold-Start, General RL and Alignment RL.</i>
+</div>
+
 #### Stage II. Reasoning Training: Core Breakthrough for Complex Cognition
 
 <div align="center">
-  <img src="asset/post2.jpeg" width="100%" alt="Kwai Keye Post-Training">
+  <img src="asset/post2.png" width="100%" alt="LongCoT data generation pipeline">
   <br>
-  <i>This phase is the highlight and major contribution of the Kwai Keye training process. By introducing a mix-mode Chain of Thought (CoT) and multi-thinking mode reinforcement learning (RL) mechanisms, it significantly enhances the model's multimodal perception, reasoning, and think-with-image capabilities, enabling it to handle more complex, multi-step tasks.</i>
+  <i>Overview of our five-step automated LongCoT data generation pipeline. .</i>
 </div>
+
 
 <details>
   <summary>More Details</summary>
@@ -424,8 +426,9 @@ The post-training phase of Kwai Keye is meticulously designed into two phases wi
 
 ## 📈 Experimental Results
 
-![image](https://github.com/user-attachments/assets/e16f785d-c275-41b9-9189-498c2dcfa6fc)
-
+<div align="center">
+  <img src="asset/performance.png" width="100%" alt="Kwai Keye-VL Performance">
+</div>
 
 1. Keye-VL-8B establishes itself with powerful, state-of-the-art perceptual abilities that are competitive with leading models. 
 2. Keye-VL-8B demonstrates exceptional proficiency in video understanding. Across a comprehensive suite of authoritative public video benchmarks, including Video-MME, Video-MMMU, TempCompass, LongVideoBench, and MMVU, the model's performance significantly surpasses that of other top-tier models of a comparable size.
