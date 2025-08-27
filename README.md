@@ -4,7 +4,14 @@
 <div align="center">
   <img src="asset/keye_logo_2.png" width="100%" alt="Kwai Keye-VL Logo">
 </div>
-<font size=7><div align='center' >  [[🍎 Home Page](https://kwai-keye.github.io/)] [[📖 Technical Report](https://arxiv.org/abs/2507.01949)] [[📊 Models](https://huggingface.co/Kwai-Keye/Keye-VL-1.5-8B)] [[🚀 Demo](https://huggingface.co/spaces/Kwai-Keye/Keye-VL-8B-Preview)] </div></font>
+<font size=7>
+<div align='center'>
+[[🍎 Home Page](https://kwai-keye.github.io/)] 
+[[📖 Technical Report](https://arxiv.org/abs/2507.01949)] 
+[[📊 Models](https://huggingface.co/Kwai-Keye/Keye-VL-1.5-8B)] 
+[[🚀 Demo](https://huggingface.co/spaces/Kwai-Keye/Keye-VL-8B-Preview)] 
+</div>
+</font>
 
 
 ## 🔥 News
