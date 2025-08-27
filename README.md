@@ -5,14 +5,14 @@
   <img src="asset/keye_logo_2.png" width="100%" alt="Kwai Keye-VL Logo">
 </div>
 
-<font size=7>
+<!-- <font size=7> -->
 <div align='center'>
 [🍎 Home Page](https://kwai-keye.github.io/) 
 [📖 Technical Report](https://arxiv.org/abs/2507.01949) 
 [📊 Models](https://huggingface.co/Kwai-Keye/Keye-VL-1.5-8B) 
 [🚀 Demo](https://huggingface.co/spaces/Kwai-Keye/Keye-VL-8B-Preview)
 </div>
-</font>
+<!-- </font> -->
 
 ## 🔥 News
 * **`2025.08.28`** 🌟 We are excited to introduce **Keye-VL-1.5**, a more powerful version! By incorporating innovative `Slow-Fast Video Encoding strategy`, `new LongCoT Cold-Start data pipeline`, and `advanced RL training strategies`, Keye-VL-1.5 reaches new heights in video understanding, image comprehension, and reasoning capabilities. Plus, it now supports an extended context length of up to **128k** tokens for handling longer conversations and complex tasks. Stay tuned for more groundbreaking innovations! 
