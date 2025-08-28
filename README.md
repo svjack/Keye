@@ -442,6 +442,12 @@ See [evaluation/KC-MMBench/README.md](evaluation/KC-MMBench/README.md) for detai
 If you find our work helpful for your research, please consider citing our work.   
 
 ```bibtex
+@misc{Keye-VL-1.5,
+      title={Kwai Keye-VL-1.5 Technical Report}, 
+      author={Kwai Keye Team},
+      year={2025},
+      eprint={TBD},
+}
 @misc{kwaikeyeteam2025kwaikeyevltechnicalreport,
       title={Kwai Keye-VL Technical Report}, 
       author={Kwai Keye Team},
