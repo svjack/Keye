@@ -7,7 +7,7 @@
 
 <font size=7><div align='center' >  
 [[🍎 Home Page](https://kwai-keye.github.io/)] 
-[[📖 Technique Report](https://arxiv.org/abs/2507.01949)] 
+[[📖 Technique Report](https://arxiv.org/abs/2509.01563)] 
 [[📊 Keye-VL-8B-Preview](https://huggingface.co/Kwai-Keye/Keye-VL-8B-Preview) ]
 [[📊 Keye-VL-1.5-8B](https://huggingface.co/Kwai-Keye/Keye-VL-1.5-8B/) ]
 [[🚀 Demo](https://huggingface.co/spaces/Kwai-Keye/Keye-VL-8B-Preview)]
@@ -15,9 +15,11 @@
 
 ## 🔥 News
 
+
+* **`2025.09.01`** 🌟 **Kwai Keye-VL 1.5 Technical Report** is now available at [arxiv](https://arxiv.org/abs/2509.01563).  
 * **`2025.08.28`** 🌟 We are excited to introduce **Kwai Keye-VL-1.5**, a more powerful version! By incorporating innovative `Slow-Fast Video Encoding strategy`, `new LongCoT Cold-Start data pipeline`, and `advanced RL training strategies`, Keye-VL-1.5 reaches new heights in video understanding, image comprehension, and reasoning capabilities. Plus, it now supports an extended context length of up to **128k** tokens for handling longer conversations and complex tasks. Stay tuned for more groundbreaking innovations! 
 * **`2025.07.08`** 🌟 Keye-VL is supported by [swift](https://github.com/modelscope/ms-swift) and [vLLM](https://github.com/vllm-project/vllm). Feel free to use it without hesitation!
-* **`2025.07.03`** 🌟 We are excited to announce the release of our comprehensive technical report!  You can read it now at [arxiv](https://arxiv.org/abs/2507.01949).  
+* **`2025.07.01`** 🌟 We are excited to announce the release of our comprehensive technical report!  You can read it now at [arxiv](https://arxiv.org/abs/2507.01949).  
 * **`2025.06.26`** 🌟 We are very proud to launch **Kwai Keye-VL**, a cutting-edge multimodal large language model meticulously crafted by the **Kwai Keye Team** at [Kuaishou](https://www.kuaishou.com/). As a cornerstone AI product within Kuaishou's advanced technology ecosystem, Keye excels in video understanding, visual perception, and reasoning tasks, setting new benchmarks in performance. Our team is working tirelessly to push the boundaries of what's possible, so stay tuned for more exciting updates!
 
 
@@ -442,11 +444,14 @@ See [evaluation/KC-MMBench/README.md](evaluation/KC-MMBench/README.md) for detai
 If you find our work helpful for your research, please consider citing our work.   
 
 ```bibtex
-@misc{Keye-VL-1.5,
-      title={Kwai Keye-VL-1.5 Technical Report}, 
+@misc{kwaikeyeteam2025kwaikeyevl15technical,
+      title={Kwai Keye-VL 1.5 Technical Report}, 
       author={Kwai Keye Team},
       year={2025},
-      eprint={TBD},
+      eprint={2509.01563},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2509.01563}, 
 }
 @misc{kwaikeyeteam2025kwaikeyevltechnicalreport,
       title={Kwai Keye-VL Technical Report}, 
