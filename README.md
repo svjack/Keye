@@ -6,6 +6,106 @@ pip install flash-attn --no-build-isolation
 pip install moviepy==1.0.3
 ```
 
+```python
+import os
+import re
+import shutil
+
+def extract_boxed_content(text):
+    """
+    使用正则表达式提取 \boxed{ 和 } 之间的内容。
+    """
+    pattern = r'\\boxed{(.*?)}</answer>'
+    match = re.search(pattern, text, re.DOTALL)
+    if match:
+        return match.group(1).strip()
+    return None
+
+def process_files(input_dir, output_dir):
+    """
+    处理输入文件夹中的文件对。
+    """
+    # 确保输出目录存在
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # 获取所有文件列表
+    all_files = os.listdir(input_dir)
+    
+    # 找出所有媒体文件 (.mp4, .png) 和文本文件 (.txt)
+    media_files = [f for f in all_files if f.endswith(('.mp4', '.png'))]
+    txt_files = [f for f in all_files if f.endswith('.txt')]
+    
+    # 创建文本文件的基名映射，方便查找对应媒体文件
+    txt_base_to_file = {os.path.splitext(f)[0]: f for f in txt_files}
+    
+    processed_count = 0
+    skipped_count = 0
+    
+    for media_file in media_files:
+        base_name = os.path.splitext(media_file)[0]
+        corresponding_txt = txt_base_to_file.get(base_name)
+        
+        if corresponding_txt is None:
+            print(f"警告: 媒体文件 {media_file} 没有对应的文本文件，跳过。")
+            skipped_count += 1
+            continue
+        
+        txt_path = os.path.join(input_dir, corresponding_txt)
+        
+        try:
+            with open(txt_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+        except Exception as e:
+            print(f"读取文件 {txt_path} 时出错: {e}，跳过。")
+            skipped_count += 1
+            continue
+        
+        extracted_content = extract_boxed_content(content)
+        
+        if extracted_content is None or extracted_content == "":
+            print(f"从 {corresponding_txt} 中未提取到内容，跳过 {media_file}。")
+            skipped_count += 1
+            continue
+        
+        # 拷贝媒体文件
+        media_src = os.path.join(input_dir, media_file)
+        media_dst = os.path.join(output_dir, media_file)
+        try:
+            shutil.copy2(media_src, media_dst)
+        except Exception as e:
+            print(f"拷贝媒体文件 {media_file} 时出错: {e}，跳过。")
+            skipped_count += 1
+            continue
+        
+        # 保存提取的字符串到文本文件
+        output_txt_filename = base_name + ".txt"
+        output_txt_path = os.path.join(output_dir, output_txt_filename)
+        try:
+            with open(output_txt_path, 'w', encoding='utf-8') as f:
+                f.write(extracted_content)
+        except Exception as e:
+            print(f"写入提取内容到 {output_txt_path} 时出错: {e}")
+            # 如果写入失败，尝试删除已拷贝的媒体文件以保持一致性？
+            try:
+                os.remove(media_dst)
+            except:
+                pass
+            skipped_count += 1
+            continue
+        
+        print(f"成功处理: {media_file} 和 {corresponding_txt}")
+        processed_count += 1
+    
+    print(f"处理完成。成功处理 {processed_count} 对文件，跳过 {skipped_count} 对文件。")
+
+if __name__ == "__main__":
+    input_directory = "Prince_Ciel_Phantomhive_Sebastian_Michaelis_both_Videos_keye_captioned"  # 请修改为您的输入文件夹路径
+    output_directory = "Prince_Ciel_Phantomhive_Sebastian_Michaelis_both_Videos_keye_extract_captioned" # 请修改为您的输出文件夹路径
+    
+    process_files(input_directory, output_directory)
+    
+```
+
 # Kwai Keye-VL
 
 
