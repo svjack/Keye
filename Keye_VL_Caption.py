@@ -12,13 +12,15 @@ from transformers import AutoModel, AutoProcessor
 from keye_vl_utils import process_vision_info
 from moviepy.editor import VideoFileClip
 import re
+import logging
 
 def get_video_duration(video_path):
     """获取视频时长（秒）"""
     try:
         with VideoFileClip(video_path) as video:
             return video.duration
-    except:
+    except Exception as e:
+        print(f"获取视频时长失败 {video_path}: {e}")
         return float('inf')
 
 class KeyeVL_Captioner:
@@ -30,21 +32,25 @@ class KeyeVL_Captioner:
         
     def setup_model(self):
         """设置和加载Keye-VL模型"""
-        if self.model is None:
-            self.model = AutoModel.from_pretrained(
-                self.args.model_path,
-                torch_dtype="auto",
-                trust_remote_code=True,
-                attn_implementation="flash_attention_2" if self.args.use_flash_attention else "eager",
-            ).eval()
-            self.model.to(self.device)
+        try:
+            if self.model is None:
+                self.model = AutoModel.from_pretrained(
+                    self.args.model_path,
+                    torch_dtype="auto",
+                    trust_remote_code=True,
+                    attn_implementation="flash_attention_2" if self.args.use_flash_attention else "eager",
+                ).eval()
+                self.model.to(self.device)
+            
+            if self.processor is None:
+                self.processor = AutoProcessor.from_pretrained(
+                    self.args.model_path, 
+                    trust_remote_code=True
+                )
+        except Exception as e:
+            print(f"模型加载失败: {e}")
+            raise
         
-        if self.processor is None:
-            self.processor = AutoProcessor.from_pretrained(
-                self.args.model_path, 
-                trust_remote_code=True
-            )
-    
     def determine_thinking_mode(self, text):
         """根据文本内容确定思考模式"""
         if text.endswith('/no_think'):
@@ -56,141 +62,198 @@ class KeyeVL_Captioner:
     
     def process_media(self, media_path, output_dir):
         """处理单个媒体文件（图片或视频）"""
-        # 检查文件是否存在
-        if not os.path.exists(media_path):
-            print(f"文件不存在: {media_path}")
-            return None
-        
-        # 获取文件扩展名确定媒体类型
-        ext = os.path.splitext(media_path)[1].lower()
-        is_video = ext in ['.mp4', '.avi', '.mov', '.mkv', '.flv', '.wmv']
-        is_image = ext in ['.jpg', '.jpeg', '.png', '.bmp', '.gif']
-        
-        if not (is_video or is_image):
-            print(f"不支持的文件格式: {media_path}")
-            return None
-        
-        # 视频时长过滤
-        if is_video:
-            duration = get_video_duration(media_path)
-            print(f"视频: {media_path}, 时长: {duration}秒")
-            if self.args.max_duration > 0 and duration > self.args.max_duration:
-                print(f"跳过时长超过限制的视频: {duration}秒 > {self.args.max_duration}秒")
+        try:
+            # 检查文件是否存在
+            if not os.path.exists(media_path):
+                print(f"文件不存在: {media_path}")
                 return None
-        
-        # 确定思考模式
-        thinking_mode, processed_text = self.determine_thinking_mode(self.args.text)
-        processed_text = self.args.text
-        
-        # 准备媒体输入
-        media_content = []
-        if is_video:
-            media_content.append({
-                "type": "video",
-                "video": media_path,
-                "fps": self.args.fps,
-                "max_frames": self.args.max_frames
-            })
-        else:
-            media_content.append({
-                "type": "image",
-                "image": media_path
-            })
-        
-        # 构建消息
-        messages = [
-            {
-                "role": "user",
-                "content": media_content + [
-                    {"type": "text", "text": processed_text + " \think" },
-                ],
-            }
-        ]
-        
-        # 处理视觉信息并生成输入
-        text = self.processor.apply_chat_template(
-            messages, tokenize=False, add_generation_prompt=True
-        )
-        image_inputs, video_inputs, mm_processor_kwargs = process_vision_info(messages)
-        
-        inputs = self.processor(
-            text=[text],
-            images=image_inputs,
-            videos=video_inputs,
-            padding=True,
-            return_tensors="pt",
-            **mm_processor_kwargs
-        )
-        inputs = inputs.to(self.device)
-        
-        # 生成描述
-        with torch.no_grad():
-            generated_ids = self.model.generate(
-                **inputs, 
-                max_new_tokens=self.args.max_new_tokens,
-                temperature=self.args.temperature,
-                do_sample=self.args.temperature > 0
-            )
-            generated_ids_trimmed = [
-                out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
+            
+            # 获取文件扩展名确定媒体类型
+            ext = os.path.splitext(media_path)[1].lower()
+            is_video = ext in ['.mp4', '.avi', '.mov', '.mkv', '.flv', '.wmv']
+            is_image = ext in ['.jpg', '.jpeg', '.png', '.bmp', '.gif']
+            
+            if not (is_video or is_image):
+                print(f"不支持的文件格式: {media_path}")
+                return None
+            
+            # 视频时长过滤
+            if is_video:
+                duration = get_video_duration(media_path)
+                print(f"视频: {media_path}, 时长: {duration}秒")
+                if self.args.max_duration > 0 and duration > self.args.max_duration:
+                    print(f"跳过时长超过限制的视频: {duration}秒 > {self.args.max_duration}秒")
+                    return None
+            
+            # 确定思考模式
+            thinking_mode, processed_text = self.determine_thinking_mode(self.args.text)
+            processed_text = self.args.text
+            
+            # 准备媒体输入
+            media_content = []
+            if is_video:
+                media_content.append({
+                    "type": "video",
+                    "video": media_path,
+                    "fps": self.args.fps,
+                    "max_frames": self.args.max_frames
+                })
+            else:
+                media_content.append({
+                    "type": "image",
+                    "image": media_path
+                })
+            
+            # 构建消息
+            messages = [
+                {
+                    "role": "user",
+                    "content": media_content + [
+                        {"type": "text", "text": processed_text },
+                    ],
+                }
             ]
-            output_text = self.processor.batch_decode(
-                generated_ids_trimmed, 
-                skip_special_tokens=True, 
-                clean_up_tokenization_spaces=False
+            
+            # 处理视觉信息并生成输入
+            text = self.processor.apply_chat_template(
+                messages, tokenize=False, add_generation_prompt=True
             )
-        
-        result = output_text[0] if isinstance(output_text, list) else output_text
-        
-        # 清理结果
-        #result = re.sub(r'<[^>]*>', '', result).strip()
+            image_inputs, video_inputs, mm_processor_kwargs = process_vision_info(messages)
+            
+            inputs = self.processor(
+                text=[text],
+                images=image_inputs,
+                videos=video_inputs,
+                padding=True,
+                return_tensors="pt",
+                **mm_processor_kwargs
+            )
+            inputs = inputs.to(self.device)
+            
+            # 生成描述
+            with torch.no_grad():
+                generated_ids = self.model.generate(
+                    **inputs, 
+                    max_new_tokens=self.args.max_new_tokens,
+                    temperature=self.args.temperature,
+                    do_sample=self.args.temperature > 0
+                )
+                generated_ids_trimmed = [
+                    out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
+                ]
+                output_text = self.processor.batch_decode(
+                    generated_ids_trimmed, 
+                    skip_special_tokens=True, 
+                    clean_up_tokenization_spaces=False
+                )
+            
+            result = output_text[0] if isinstance(output_text, list) else output_text
+            
+            # 清理结果
+            #result = re.sub(r'<[^>]*>', '', result).strip()
 
-        # 保存结果
-        media_name = os.path.basename(media_path)
-        txt_filename = os.path.splitext(media_name)[0] + ".txt"
-        txt_path = os.path.join(output_dir, txt_filename)
-        
-        with open(txt_path, 'w', encoding='utf-8') as f:
-            f.write(result)
-        
-        # 复制媒体文件到输出目录
-        output_media_path = os.path.join(output_dir, media_name)
-        shutil.copy2(media_path, output_media_path)
-        
-        print(f"文件: {media_name}")
-        print(f"思考模式: {thinking_mode}")
-        print(f"描述: {result}")
-        print("-" * 50)
-        
-        return result
+            # 保存结果
+            media_name = os.path.basename(media_path)
+            txt_filename = os.path.splitext(media_name)[0] + ".txt"
+            txt_path = os.path.join(output_dir, txt_filename)
+            
+            with open(txt_path, 'w', encoding='utf-8') as f:
+                f.write(result)
+            
+            # 复制媒体文件到输出目录
+            output_media_path = os.path.join(output_dir, media_name)
+            shutil.copy2(media_path, output_media_path)
+            
+            print(f"文件: {media_name}")
+            print(f"思考模式: {thinking_mode}")
+            print(f"描述: {result}")
+            print("-" * 50)
+            
+            return result
+            
+        except Exception as e:
+            print(f"处理文件 {media_path} 时发生异常: {e}")
+            logging.error(f"处理文件 {media_path} 时发生异常: {e}")
+            return None
     
     def process_all_media(self):
         """处理所有媒体文件"""
-        os.makedirs(self.args.output_dir, exist_ok=True)
-        self.setup_model()
-        
-        if os.path.isfile(self.args.source_path):
-            self.process_media(self.args.source_path, self.args.output_dir)
-        elif os.path.isdir(self.args.source_path):
-            supported_extensions = ['.mp4', '.avi', '.mov', '.mkv', '.flv', '.wmv', 
-                                  '.jpg', '.jpeg', '.png', '.bmp', '.gif']
+        try:
+            os.makedirs(self.args.output_dir, exist_ok=True)
+            self.setup_model()
             
-            for file in os.listdir(self.args.source_path):
-                if any(file.lower().endswith(ext) for ext in supported_extensions):
-                    media_path = os.path.join(self.args.source_path, file)
-                    self.process_media(media_path, self.args.output_dir)
-        
-        if not self.args.keep_model_loaded:
-            self.cleanup()
+            # 设置日志记录
+            logging.basicConfig(
+                filename=os.path.join(self.args.output_dir, 'processing_errors.log'),
+                level=logging.ERROR,
+                format='%(asctime)s - %(levelname)s - %(message)s'
+            )
+            
+            processed_count = 0
+            failed_count = 0
+            skipped_count = 0
+            
+            if os.path.isfile(self.args.source_path):
+                # 处理单个文件
+                try:
+                    result = self.process_media(self.args.source_path, self.args.output_dir)
+                    if result is None:
+                        skipped_count += 1
+                        print(f"跳过文件: {self.args.source_path}")
+                    else:
+                        processed_count += 1
+                except Exception as e:
+                    failed_count += 1
+                    print(f"处理文件 {self.args.source_path} 时发生异常: {e}")
+                    logging.error(f"处理文件 {self.args.source_path} 时发生异常: {e}")
+                    
+            elif os.path.isdir(self.args.source_path):
+                supported_extensions = ['.mp4', '.avi', '.mov', '.mkv', '.flv', '.wmv', 
+                                      '.jpg', '.jpeg', '.png', '.bmp', '.gif']
+                
+                for file in os.listdir(self.args.source_path):
+                    if any(file.lower().endswith(ext) for ext in supported_extensions):
+                        media_path = os.path.join(self.args.source_path, file)
+                        try:
+                            result = self.process_media(media_path, self.args.output_dir)
+                            if result is None:
+                                skipped_count += 1
+                                print(f"跳过文件: {file}")
+                            else:
+                                processed_count += 1
+                        except Exception as e:
+                            failed_count += 1
+                            print(f"处理文件 {file} 时发生异常: {e}")
+                            logging.error(f"处理文件 {file} 时发生异常: {e}")
+                            continue
+            
+            # 输出处理统计信息
+            print(f"\n处理完成!")
+            print(f"成功处理: {processed_count} 个文件")
+            print(f"跳过: {skipped_count} 个文件")
+            print(f"失败: {failed_count} 个文件")
+            print(f"详细错误信息请查看: {os.path.join(self.args.output_dir, 'processing_errors.log')}")
+            
+        except Exception as e:
+            print(f"程序执行过程中发生严重错误: {e}")
+            logging.error(f"程序执行过程中发生严重错误: {e}")
+        finally:
+            if not self.args.keep_model_loaded:
+                self.cleanup()
     
     def cleanup(self):
         """清理模型和释放内存"""
-        del self.model
-        del self.processor
-        self.model = None
-        self.processor = None
-        if torch.cuda.is_available():
-            torch.cuda.empty_cache()
+        try:
+            if self.model is not None:
+                del self.model
+            if self.processor is not None:
+                del self.processor
+            self.model = None
+            self.processor = None
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+        except Exception as e:
+            print(f"清理资源时发生异常: {e}")
 
 def main():
     parser = argparse.ArgumentParser(description="Keye-VL媒体描述生成工具")
