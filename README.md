@@ -1,3 +1,10 @@
+```bash
+pip install keye-vl-utils==1.5.2 
+pip install huggingface_hub transformers torch torchvision -U
+pip install "numpy<2"
+pip install flash-attn --no-build-isolation
+```
+
 # Kwai Keye-VL
 
 
