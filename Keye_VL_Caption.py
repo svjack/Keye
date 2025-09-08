@@ -1,6 +1,8 @@
 '''
 python Keye_VL_Caption.py Prince_Ciel_Phantomhive_Sebastian_Michaelis_both_Videos_qwen_vl_captioned Prince_Ciel_Phantomhive_Sebastian_Michaelis_both_Videos_keye_captioned --use_flash_attention \
 --text "给你的视频中可能出现的主要人物为两个（可能出现一个或两个），当人物为一个戴眼罩的男孩时，男孩的名字是'夏尔',当人物是一个穿燕尾西服的成年男子时，男子的名字是'塞巴斯蒂安',在你的视频描述中要使用人物的名字并且简单描述人物的外貌及衣着。 使用中文描述这个视频 /think"
+
+python Keye_VL_Caption.py Skirk_Images_Captioned Skirk_Keye_VL_Images_Captioned --use_flash_attention --text "画面中的人物是丝柯克，请结合人物的衣着细节和画面背景给出图片的中文描述,在描述中必须提到人物名称为丝柯克 /no_think"
 '''
 
 import os
